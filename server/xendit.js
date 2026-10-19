@@ -38,3 +38,13 @@ export function createPaymentRequest(payload, idempotencyKey) {
 export function getPaymentRequest(id) {
   return request('GET', `/payment_requests/${encodeURIComponent(id)}`);
 }
+
+// POST /sessions (Xendit Sessions API — hosted checkout via payment link)
+export function createSession(payload, idempotencyKey) {
+  return request('POST', '/sessions', payload, idempotencyKey ? { 'idempotency-key': idempotencyKey } : {});
+}
+
+// GET /sessions/:id
+export function getSession(id) {
+  return request('GET', `/sessions/${encodeURIComponent(id)}`);
+}
