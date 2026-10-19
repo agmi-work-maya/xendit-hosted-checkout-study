@@ -3,21 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Payment Result</title>
+<title>Checkout Result</title>
 <style>body { font-family: system-ui, sans-serif; max-width: 420px; margin: 3rem auto; padding: 0 1rem; }</style>
 </head>
 <body>
-<h1>Payment status</h1>
+<h1>Session status</h1>
 <p id="status">Checking…</p>
 <p><a href="/">Back</a></p>
 <script>
-const params = new URLSearchParams(location.search);
-const ref = params.get('ref');
-const base = params.get('kind') === 'session' ? '/api/sessions/' : '/api/payment-requests/';
+const ref = new URLSearchParams(location.search).get('ref');
 const el = document.getElementById('status');
-// Trust the server-side status, not the return-URL query param
+// Trust the server-side status, not the return URL
 (async () => {
-  const res = await fetch(base + encodeURIComponent(ref));
+  const res = await fetch('/api/sessions/' + encodeURIComponent(ref));
   const data = await res.json();
   el.textContent = res.ok ? `Reference ${ref}: ${data.status}` : (data.error || 'Error');
 })();
