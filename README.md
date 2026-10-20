@@ -1,7 +1,7 @@
-# Xendit Create Session demo
+# Xendit Create Payment Request demo
 
 Express server + static HTML client calling Xendit's
-[Create Session](https://docs.xendit.co/apidocs/create-session) endpoint (`POST /sessions`, `mode: PAYMENT_LINK`).
+[Create Payment Request](https://docs.xendit.co/apidocs/create-payment-request) endpoint (`POST /payment_requests`).
 
 ## Run
 ```
@@ -11,10 +11,10 @@ npm start              # http://localhost:3000
 ```
 
 ## Flow
-1. Browser POSTs `/api/sessions` → server calls Xendit with the secret key (Basic auth).
-2. Server returns Xendit's `payment_link_url`; the browser redirects to Xendit's hosted checkout.
-3. Customer returns to `/result.html`, which asks the server (`GET /api/sessions/:ref`) for the authoritative status.
+1. Browser POSTs `/api/payment-requests` → server calls Xendit with the secret key (Basic auth).
+2. If Xendit returns a redirect action URL, the browser is sent there.
+3. Customer returns to `/result.html`, which asks the server (`GET /api/payment-requests/:ref`) for the authoritative status.
 4. Xendit webhooks hit `POST /webhooks/xendit` (verified via `x-callback-token`); expose locally with a tunnel such as ngrok.
 
-Note: the request payload was written without access to the live docs; verify the field names
-(`session_type`, `mode`, `customer`, response `payment_link_url`) against the page above.
+Note: the request payload was written without access to the live docs; verify `channel_code`,
+`channel_properties` and the `api-version` header against the page above and adjust `server/index.js` per channel.
